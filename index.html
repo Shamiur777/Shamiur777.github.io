@@ -28,6 +28,9 @@
   .stats div b { display:block; font-size:1.4rem; color:var(--ink); }
   .stats div span { font-size:.82rem; color:var(--muted); }
   .note { color:var(--muted); font-size:.92rem; }
+  .shots { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; margin:14px 0 6px; }
+  .shots img { width:100%; border:1px solid var(--line); border-radius:6px; }
+  .feature { border-color:var(--accent); }
 </style>
 </head>
 <body>
@@ -71,6 +74,24 @@
   <p class="note">The internal systems hold company data, so they are not shown here. The projects below recreate the same ideas with synthetic data.</p>
 
   <h2>Demo projects (synthetic data)</h2>
+  <div class="card feature">
+    <div class="tag">Featured &middot; full-stack &middot; public repo</div>
+    <h3>Ledgerline: multi-tenant accounting</h3>
+    <p>A public rebuild of the accounting tool I run for my own company, generalised so any company can sign up without ever seeing another company's books. Bank accounts, transactions, payables, payroll, payment approvals and audit-ready reports.</p>
+    <div class="shots">
+      <img src="img/dashboard.png" alt="Ledgerline dashboard" loading="lazy">
+      <img src="img/approvals.png" alt="Ledgerline payment approvals" loading="lazy">
+      <img src="img/reports.png" alt="Ledgerline reports" loading="lazy">
+    </div>
+    <ul>
+      <li>Tenant isolation is enforced in Postgres with row-level security, not in app code, and proven by automated tests.</li>
+      <li>Payments need approval from a second person, run as one atomic database function. Overpaying a bill is blocked even under concurrent payments.</li>
+      <li>Append-only audit log written by the database; exports to Excel, PDF and CSV.</li>
+      <li>77 database assertions, 39 unit tests and 3 end-to-end flows, all run in CI. The README lists the trade-offs and what is not built yet.</li>
+      <li>Next.js, TypeScript, Supabase (Postgres), Playwright. Demo data is fictional.</li>
+    </ul>
+    <p><a href="https://github.com/Shamiur777/Ledgerline-by-Shamiur-Rahman">View the code and full write-up</a></p>
+  </div>
   <div class="card">
     <div class="tag">Document automation &middot; human in the loop</div>
     <h3>Invoice Intake</h3>
@@ -102,7 +123,7 @@
       <li>Python, 9 automated tests.</li>
     </ul>
   </div>
-  <p class="note">Source code: <a href="https://github.com/Shamiur777/invoice-intake">invoice-intake</a> &middot; <a href="https://github.com/Shamiur777/mcp-mock-erp">mcp-mock-erp</a> &middot; <a href="https://github.com/Shamiur777/study-assistant">study-assistant</a></p>
+  <p class="note">Source code: <a href="https://github.com/Shamiur777/Ledgerline-by-Shamiur-Rahman">Ledgerline</a> &middot; <a href="https://github.com/Shamiur777/invoice-intake">invoice-intake</a> &middot; <a href="https://github.com/Shamiur777/mcp-mock-erp">mcp-mock-erp</a> &middot; <a href="https://github.com/Shamiur777/study-assistant">study-assistant</a></p>
 
   <h2>Experience</h2>
   <div class="card">
