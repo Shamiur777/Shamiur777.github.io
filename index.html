@@ -99,7 +99,7 @@
     <ul>
       <li>Review rules do not trust the model's confidence alone: they also check that line items sum to the subtotal and subtotal plus tax equals the total.</li>
       <li>Tested on 70 synthetic invoices, including image-only scans. On the 20-invoice hard set, the baseline extractor failed and every document was routed to review, with none wrongly approved.</li>
-      <li>Python, Claude API (tool use), Streamlit, 7 automated tests.</li>
+      <li>Python, Claude API (tool use), Streamlit, 8 automated tests.</li>
     </ul>
   </div>
   <div class="card">
@@ -110,7 +110,7 @@
       <li>Role-based tool access, deny by default; salary hidden from unauthorised roles.</li>
       <li>Destructive actions need explicit confirmation; large transactions need admin approval.</li>
       <li>Every call, including denials, is written to an audit log.</li>
-      <li>Python, Model Context Protocol, SQLite, 11 automated tests (including one over the real MCP protocol).</li>
+      <li>Python, Model Context Protocol, SQLite, 14 automated tests (including end-to-end tests over the real MCP protocol).</li>
     </ul>
   </div>
   <div class="card">
@@ -120,10 +120,84 @@
     <ul>
       <li>BM25 retrieval written from scratch, with an optional Claude mode that must cite sources.</li>
       <li>48 labelled questions, tuned on one half and measured on a held-out half: 88% on the held-out set, with failures documented.</li>
-      <li>Python, 9 automated tests.</li>
+      <li>Python, 11 automated tests.</li>
     </ul>
   </div>
-  <p class="note">Source code: <a href="https://github.com/Shamiur777/Ledgerline-by-Shamiur-Rahman">Ledgerline</a> &middot; <a href="https://github.com/Shamiur777/invoice-intake">invoice-intake</a> &middot; <a href="https://github.com/Shamiur777/mcp-mock-erp">mcp-mock-erp</a> &middot; <a href="https://github.com/Shamiur777/study-assistant">study-assistant</a></p>
+  <h3 style="margin:28px 0 12px">AI reliability and evaluation toolkit</h3>
+  <p class="note">Eight small, tested projects on making AI systems trustworthy in a business. All use synthetic data; model behaviour is simulated except in the fine-tuning project, and each README says exactly what was and was not measured.</p>
+  <div class="card">
+    <div class="tag">Evaluation &middot; CI</div>
+    <h3><a href="https://github.com/Shamiur777/llm-regression-guard">LLM Regression Guard</a></h3>
+    <p>Tests an AI feature against known-good cases whenever a prompt or model changes, and fails the build on a real quality drop.</p>
+    <ul>
+      <li>A paired statistical test separates noise from regressions: in a simulation, 0 of 200 unchanged runs raised a false alarm, against 20 of 200 without it.</li>
+      <li>Slack alert, Markdown report and GitHub Action included. 51 tests. The model is a simulator.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="tag">Cost &middot; reliability</div>
+    <h3><a href="https://github.com/Shamiur777/llm-gateway">LLM Gateway</a></h3>
+    <p>Routes each request to the cheapest capable model, enforces per-team rate limits and budgets, falls back when a provider fails, and logs everything.</p>
+    <ul>
+      <li>Simulated demo of 600 requests: 66% cheaper than always using the largest model (including the cost of validating the routing), 39 fallbacks, budget stops working. Simulated providers.</li>
+      <li>Circuit breaker, token buckets, observability report, HTTP server. 30 tests.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="tag">Observability &middot; eval data</div>
+    <h3><a href="https://github.com/Shamiur777/ai-pipeline-forensics">AI Pipeline Forensics</a></h3>
+    <p>Traces every step of a multi-step AI pipeline, finds the true cause of a bad answer, and mines production logs into a growing evaluation set.</p>
+    <ul>
+      <li>Counterfactual replay found the root cause in 56 of 56 simulated failures; picking the first bad step got 40 of 56, and 8 of 24 on cases built to fool it.</li>
+      <li>Log miner recovers about 85-90% of planted failures. 33 tests. Synthetic data.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="tag">Retrieval &middot; citations</div>
+    <h3><a href="https://github.com/Shamiur777/hybrid-rag">Hybrid RAG</a></h3>
+    <p>Keyword and vector search over 24 fictional company documents, with citation verification and refusal.</p>
+    <ul>
+      <li>Measured honestly on a held-out set: hybrid search did <em>not</em> beat the better single method here, and the README explains where and why.</li>
+      <li>Three chunking strategies compared. 52 tests.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="tag">Safety &middot; databases</div>
+    <h3><a href="https://github.com/Shamiur777/text-to-sql-guard">Text-to-SQL Guard</a></h3>
+    <p>Turns plain-English questions into SQL, blocks anything unsafe, and attaches a confidence score or abstains.</p>
+    <ul>
+      <li>46 of 46 malicious queries blocked and 0 of 35 valid ones blocked; 19 write attempts sent past the parser were all rejected by a read-only connection.</li>
+      <li>Confidence results come from a scripted model and are labelled as such. 113 tests.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="tag">Experimentation &middot; rollout</div>
+    <h3><a href="https://github.com/Shamiur777/prompt-lab">Prompt Lab</a></h3>
+    <p>Versioned prompts, A/B tests with sound statistics, and gradual rollouts with automatic rollback.</p>
+    <ul>
+      <li>Simulation shows naive peeking at results gives a 19% false-positive rate against 5% for a single look; the sequential test keeps it near 2%.</li>
+      <li>Healthy rollouts reach 100%; degraded prompts are rolled back at 1-5% in 50 of 50 simulated runs. 71 tests.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="tag">CI &middot; documentation</div>
+    <h3><a href="https://github.com/Shamiur777/docs-drift-guard">Docs Drift Guard</a></h3>
+    <p>A GitHub Action that finds documentation made stale by code changes, fixes the mechanical cases and flags the rest for a human.</p>
+    <ul>
+      <li>On 16 held-out scenarios: 21 of 22 stale sections found, 2 false alarms, 11 of 11 automatic fixes exact. Built on one small sample library.</li>
+      <li>144 tests.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="tag">Fine-tuning &middot; real run</div>
+    <h3><a href="https://github.com/Shamiur777/lora-finetune-pipeline">LoRA Fine-Tuning Pipeline</a></h3>
+    <p>A reproducible pipeline: build a domain dataset, fine-tune a small open model with LoRA, compare it honestly with the base model, and package the result.</p>
+    <ul>
+      <li>Real run on a CPU with a 135M-parameter model: test F1 rose from 0.234 to 0.349 (n=18, 95% interval +0.056 to +0.186). The README says the gain is mostly answer style, not new knowledge.</li>
+      <li>31 tests. Toy scale.</li>
+    </ul>
+  </div>
+  <p class="note">Source code: <a href="https://github.com/Shamiur777/Ledgerline-by-Shamiur-Rahman">Ledgerline</a> &middot; <a href="https://github.com/Shamiur777/invoice-intake">invoice-intake</a> &middot; <a href="https://github.com/Shamiur777/mcp-mock-erp">mcp-mock-erp</a> &middot; <a href="https://github.com/Shamiur777/study-assistant">study-assistant</a> &middot; all repos at <a href="https://github.com/Shamiur777?tab=repositories">github.com/Shamiur777</a></p>
 
   <h2>Experience</h2>
   <div class="card">
